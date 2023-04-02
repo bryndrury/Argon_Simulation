@@ -97,19 +97,16 @@ int main(int argc, char* argv[])
             save_data(savefile, system, time);
             count = 1;
 
-
-           std::system("clear");
-           cout << std::setprecision(2);
-
-          auto now = std::chrono::high_resolution_clock::now();
-          double est_finish = (std::chrono::duration_cast<std::chrono::seconds>(now-begin).count() / (100*time/T)) - std::chrono::duration_cast<std::chrono::seconds>(now-begin).count();
+           // std::system("clear");
+           // cout << std::setprecision(3);
+          // auto now = std::chrono::high_resolution_clock::now();
+          // double est_finish = (std::chrono::duration_cast<std::chrono::seconds>(now-begin).count() / (100*t/T)) - std::chrono::duration_cast<std::chrono::seconds>(now-begin).count();
 //               (std::chrono::duration_cast<std::chrono::seconds>(now-begin).count() / (time/T)) - std::chrono::duration_cast<std::chrono::seconds>(now-begin).count();
-
-          cout << endl << endl << "- - - - - - - - - - - - - - - -" << endl;
+          // cout << endl << endl << "- - - - - - - - - - - - - - - -" << endl;
           cout << "Simulation Progress: " << 100*t/T << "%" << endl;
-          cout << std::setprecision(5);
-          cout << "Estimated time to Completion: " << est_finish << " Seconds." << endl;
-          cout << "- - - - - - - - - - - - - - - -" << endl << endl;
+          // cout << std::setprecision(5);
+          // // cout << "Estimated time to Completion: " << est_finish << " Seconds." << endl;
+          // cout << "- - - - - - - - - - - - - - - -" << endl << endl;
         }
         else {count++;}
         time += dt;
@@ -183,12 +180,12 @@ void vel_verlet(int N, int L, std::vector<body> &system, double dt)
 {
     std::vector<body> new_system = system;
 
+    update_acc(N, new_system);
+
     for (int p = 0; p < N; p++)
     {
         vec new_r;
         vec new_v;
-
-        update_acc(N, new_system);
 
         new_r = system[p].get_pos() + ( system[p].get_vel() * dt ) + ( 0.5 * system[p].get_acc() * pow(dt, 2) );
 
@@ -323,17 +320,17 @@ void save_data(std::ofstream& savefile, const std::vector<body> &system, double 
 {
     // Function for saving the simulation data to file.
 
-    vec L; // Total angular momentum
-    double E = 0.0; // Total energy
-    for(int p = 0; p < system.size(); p++)
-    {
-        E += system[p].get_ke() + 0.5*system[p].get_gpe();
-        L += system[p].get_L();
-    }
-    double Lmag = L.length(); // Magnitude of total angular momentum
+    // vec L; // Total angular momentum
+    // double E = 0.0; // Total energy
+    // for(int p = 0; p < system.size(); p++)
+    // {
+    //     E += system[p].get_ke() + 0.5*system[p].get_gpe();
+    //     L += system[p].get_L();
+    // }
+    // double Lmag = L.length(); // Magnitude of total angular momentum
 
     // Write a header for this time-step with time, total energy and total mag of L:
-    savefile << t  << endl; //<< "," << E << "," << Lmag << endl;
+    savefile << t << endl; //<< "," << E << "," << Lmag << endl;
 
     // Loop over the bodies:
     for(int p = 0; p < system.size(); p++)
